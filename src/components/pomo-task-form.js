@@ -3,19 +3,18 @@ import { dispatchStartTimerEvent } from "../utils/events";
 class PomoTaskForm extends HTMLElement {
   constructor() {
     super();
-
     this.render();
+    this.taskForm = document.querySelector(".task-form");
   }
   connectedCallback() {
-    const taskForm = document.querySelector(".task-form");
+    this.taskForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.startTimer();
+    });
+  }
 
-    taskForm.addEventListener(
-      "submit",
-      function (e) {
-        e.preventDefault();
-        this.startTimer();
-      }.bind(this)
-    );
+  disconnectedCallback() {
+    this.taskForm.removeEventListener();
   }
 
   startTimer() {

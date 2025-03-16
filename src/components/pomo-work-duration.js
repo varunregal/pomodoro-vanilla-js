@@ -3,12 +3,12 @@ class PomoWorkDuration extends HTMLElement {
     super();
     this.workDurationList = [5, 15, 25, 30, 45, 60];
     this.render();
-  }
-  connectedCallback() {
-    const workDurationButtons = document.querySelectorAll(
+    this.workDurationButtons = document.querySelectorAll(
       ".work-duration__button"
     );
-    workDurationButtons.forEach((workDurationButton) => {
+  }
+  connectedCallback() {
+    this.workDurationButtons.forEach((workDurationButton) => {
       workDurationButton.addEventListener("click", (e) => {
         const workDurationButtonEvent = new CustomEvent("set-work-duration", {
           bubbles: true,
@@ -19,6 +19,12 @@ class PomoWorkDuration extends HTMLElement {
         });
         this.dispatchEvent(workDurationButtonEvent);
       });
+    });
+  }
+
+  disconnectedCallback() {
+    this.workDurationButtons.forEach((workDurationButton) => {
+      workDurationButton.removeEventListener();
     });
   }
   generateWorkDurationTabs() {

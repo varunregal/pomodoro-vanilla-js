@@ -24,6 +24,9 @@ class PomoTimer extends HTMLElement {
 
   disconnectedCallback() {
     this.clearTimer();
+    document.removeEventListener("start-timer");
+    document.removeEventListener("reset-timer");
+    document.removeEventListener("set-work-duration");
   }
 
   generateTime(duration) {

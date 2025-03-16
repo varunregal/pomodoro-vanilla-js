@@ -7,19 +7,23 @@ class PomoTimerActions extends HTMLElement {
   constructor() {
     super();
     this.render();
+    this.startButton = document.querySelector(".pomo-timer-actions__start");
+    this.pauseButton = document.querySelector(".pomo-timer-actions__pause");
+    this.resetButton = document.querySelector(".pomo-timer-actions__reset");
   }
   connectedCallback() {
-    const startButton = document.querySelector(".pomo-timer-actions__start");
-    const pauseButton = document.querySelector(".pomo-timer-actions__pause");
-    const resetButton = document.querySelector(".pomo-timer-actions__reset");
-
-    startButton.addEventListener("click", () => {
+    this.startButton.addEventListener("click", () => {
       dispatchStartTimerEvent(this);
     });
 
-    resetButton.addEventListener("click", () => {
+    this.resetButton.addEventListener("click", () => {
       dispatchResetTimerEvent(this);
     });
+  }
+
+  disconnectedCallback() {
+    this.startButton.removeEventListener();
+    this.resetButton.removeEventListener();
   }
   render() {
     this.innerHTML = `
