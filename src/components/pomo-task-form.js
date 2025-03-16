@@ -1,3 +1,5 @@
+import { dispatchStartTimerEvent } from "../utils/events";
+
 class PomoTaskForm extends HTMLElement {
   constructor() {
     super();
@@ -17,12 +19,7 @@ class PomoTaskForm extends HTMLElement {
   }
 
   startTimer() {
-    const event = new CustomEvent("start-timer", {
-      bubbles: true,
-      composed: true,
-    });
-
-    this.dispatchEvent(event);
+    dispatchStartTimerEvent(this);
   }
 
   render() {

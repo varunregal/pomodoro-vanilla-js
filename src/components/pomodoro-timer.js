@@ -18,6 +18,7 @@ class PomodoroTimer extends HTMLElement {
         <pomo-heading-with-helper></pomo-heading-with-helper>
         <pomo-task-form></pomo-task-form>
         <pomo-timer></pomo-timer>
+        <pomo-timer-actions></pomo-timer-actions>
         <pomo-work-duration></pomo-work-duration>
       </section>
     `;
