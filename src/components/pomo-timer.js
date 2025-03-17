@@ -1,15 +1,18 @@
 class PomoTimer extends HTMLElement {
   constructor() {
     super();
-    this.workDuration = 15;
-    this.timeInSeconds = this.workDuration * 60;
-    this.time = this.generateTime(this.timeInSeconds);
     this.timeIntervalId;
+    this.workDuration = 15;
+    this.setTime();
     this.render();
   }
   connectedCallback() {
     document.addEventListener("start-timer", () => {
       this.startTimer();
+    });
+
+    document.addEventListener("pause-timer", () => {
+      this.pauseTimer();
     });
 
     document.addEventListener("reset-timer", () => {
@@ -18,6 +21,7 @@ class PomoTimer extends HTMLElement {
 
     document.addEventListener("set-work-duration", (e) => {
       this.workDuration = e.detail.workDuration;
+      this.setTime();
       this.render();
     });
   }
@@ -25,8 +29,14 @@ class PomoTimer extends HTMLElement {
   disconnectedCallback() {
     this.clearTimer();
     document.removeEventListener("start-timer");
+    document.removeEventListener("pause-timer");
     document.removeEventListener("reset-timer");
     document.removeEventListener("set-work-duration");
+  }
+
+  setTime() {
+    this.timeInSeconds = this.workDuration * 60;
+    this.time = this.generateTime(this.timeInSeconds);
   }
 
   generateTime(duration) {
@@ -40,28 +50,34 @@ class PomoTimer extends HTMLElement {
     );
   }
   startTimer() {
-    const startTime = Date.now();
-    const initialSeconds = this.timeInSeconds;
-    this.timeIntervalId = setInterval(() => {
-      const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
-      this.timeInSeconds = Math.max(0, initialSeconds - elapsedSeconds);
+    if (!this.timeIntervalId) {
+      const startTime = Date.now();
+      const initialSeconds = this.timeInSeconds;
+      this.timeIntervalId = setInterval(() => {
+        const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+        this.timeInSeconds = Math.max(0, initialSeconds - elapsedSeconds);
 
-      this.time = this.generateTime(this.timeInSeconds);
-      this.render();
-    }, 1000);
+        this.time = this.generateTime(this.timeInSeconds);
+        this.render();
+      }, 1000);
+    }
+    console.log(this.timeIntervalId);
+  }
+
+  pauseTimer() {
+    if (this.timeIntervalId) this.clearTimer();
   }
 
   resetTimer() {
-    if (this.timeIntervalId) {
-      this.clearTimer();
-      this.timeInSeconds = this.workDuration * 60;
-      this.time = this.generateTime(this.timeInSeconds);
-      this.render();
-    }
+    this.clearTimer();
+    this.setTime();
+    this.render();
   }
 
   clearTimer() {
     clearInterval(this.timeIntervalId);
+    this.timeIntervalId = undefined;
+    console.log(this.timeIntervalId);
   }
 
   render() {

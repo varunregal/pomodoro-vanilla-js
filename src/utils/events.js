@@ -20,3 +20,11 @@ export function dispatchResetTimerEvent(element) {
   });
   element.dispatchEvent(resetTimerEvent);
 }
+
+export function dispatchPauseTimerEvent(element) {
+  const pauseTimerEvent = new CustomEvent(EVENTS.PAUSE_TIMER, {
+    bubbles: true,
+    composed: true,
+  });
+  element.dispatchEvent(pauseTimerEvent);
+}
