@@ -13,10 +13,8 @@ class PomoTimerActions extends HTMLElement {
   }
 
   setUpReferences() {
-    this.startPauseButton = this.querySelector(
-      ".pomo-timer-actions__start-or-pause"
-    );
-    this.resetButton = this.querySelector(".pomo-timer-actions__reset");
+    this.startPauseButton = this.querySelector(".start-or-pause");
+    this.resetButton = this.querySelector(".reset");
   }
 
   setUpEventListeners() {
@@ -29,7 +27,7 @@ class PomoTimerActions extends HTMLElement {
       "click",
       this.handleResetButtonClick.bind(this)
     );
-    setDurationObservable.subscribe(this.handleStartClick.bind(this));
+    setDurationObservable.subscribe(this.handleResetButtonClick.bind(this));
   }
 
   connectedCallback() {
@@ -80,9 +78,9 @@ class PomoTimerActions extends HTMLElement {
 
   render() {
     this.innerHTML = `
-      <section class="pomo-timer-actions">
-        <button class="pomo-timer-actions__start-or-pause">Start</button>
-        <button class="pomo-timer-actions__reset">Reset</button>
+      <section class="flex gap-4">
+        <button class="start-or-pause btn btn-primary">Start</button>
+        <button class="reset btn btn-primary">Reset</button>
       </section>
     `;
   }

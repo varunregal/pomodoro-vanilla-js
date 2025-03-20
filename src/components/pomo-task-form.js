@@ -4,31 +4,33 @@ class PomoTaskForm extends HTMLElement {
   constructor() {
     super();
     this.render();
-    this.taskForm = document.querySelector(".task-form");
+    this.taskForm = this.querySelector("form");
   }
   connectedCallback() {
-    this.taskForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      this.startTimer();
-    });
+    // this.taskForm.addEventListener("submit", (e) => {
+    //   e.preventDefault();
+    //   this.startTimer();
+    // });
   }
 
   disconnectedCallback() {
-    this.taskForm.removeEventListener();
+    // this.taskForm.removeEventListener();
   }
 
-  startTimer() {
-    timerObservable.broadcast("start-timer");
-  }
+  // startTimer() {
+  //   timerObservable.broadcast("start-timer");
+  // }
 
   render() {
     this.innerHTML = `
-      <form class="task-form">
-        <input name="task" placeholder="What are you planning to focus on today" class="task-input"/>
-        <select class="task-select">
+      <form class="flex flex-col gap-4">
+        <input name="task" placeholder="What are you planning to focus on today" class="form-input"/>
+        <select class="form-select">
           <option>Development</option>
+          <option>Education</option>
+          <option>Hobbies</option>
         </select>
-        <button type="submit">Submit</button>
+        <button type="submit" class='btn btn-primary'>Submit</button>
       </form>
     `;
   }

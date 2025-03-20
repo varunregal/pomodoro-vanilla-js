@@ -71,14 +71,10 @@ class PomoTimer extends HTMLElement {
   }
 
   formatTime(duration) {
-    const minutes = Math.floor(duration / 60);
-    const subSeconds = duration % 60;
+    const minutes = Math.floor(duration / 60).toString();
+    const seconds = (duration % 60).toString().padStart(2, "0");
 
-    return (
-      minutes.toString() +
-      ":" +
-      (subSeconds < 10 ? "0" + subSeconds.toString() : subSeconds.toString())
-    );
+    return `${minutes}:${seconds}`;
   }
 
   updatePomoTimerClock() {

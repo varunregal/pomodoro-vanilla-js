@@ -13,9 +13,9 @@ class PomoHeadingWithHelper extends HTMLElement {
     const heading = this.getAttribute("heading") || "Work Time";
     const helper = this.getAttribute("helper") || "Focus on one task at a time";
     this.innerHTML = `
-      <div class="heading-with-helper">
-          <h2>${heading}</h2>
-          <p>${helper}</p>
+      <div class="text-center mt-10">
+          <h2 class='text-3xl font-bold'>${heading}</h2>
+          <p class='text-gray-600'>${helper}</p>
         </slot>
       </div>
     `;
