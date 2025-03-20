@@ -1,6 +1,7 @@
 import { setDurationObservable } from "../utils/observables/set-duration-observable";
 import { timerObservable } from "../utils/observables/timer-observable";
 
+// add local state here
 class PomoTimerActions extends HTMLElement {
   constructor() {
     super();
@@ -59,13 +60,10 @@ class PomoTimerActions extends HTMLElement {
   disconnectedCallback() {
     this.startPauseButton.removeEventListener(
       "click",
-      this.handleStartPauseButtonClick.bind(this)
+      this.handleStartPauseButtonClick
     );
-    this.resetButton.removeEventListener(
-      "click",
-      this.handleResetButtonClick.bind(this)
-    );
-    setDurationObservable.unsubscibe(this.handleStartClick.bind(this));
+    this.resetButton.removeEventListener("click", this.handleResetButtonClick);
+    setDurationObservable.unsubscribe(this.handleResetButtonClick);
   }
 
   setIsClockRunning(status) {
