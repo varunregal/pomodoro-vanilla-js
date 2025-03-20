@@ -1,10 +1,3 @@
-// const templatePomodoro = document.createElement("template");
-// templatePomodoro.innerHTML = `
-//   <section>
-//     <pomo-heading-with-helper></pomo-heading-with-helper>
-//     <pomo-task-form></pomo-task-form>
-//   </section>
-// `;
 class PomodoroTimer extends HTMLElement {
   constructor() {
     super();

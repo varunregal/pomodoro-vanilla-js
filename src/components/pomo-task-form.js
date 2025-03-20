@@ -1,4 +1,4 @@
-import { dispatchStartTimerEvent } from "../utils/events";
+import { timerObservable } from "../utils/observables/timer-observable";
 
 class PomoTaskForm extends HTMLElement {
   constructor() {
@@ -18,7 +18,7 @@ class PomoTaskForm extends HTMLElement {
   }
 
   startTimer() {
-    dispatchStartTimerEvent(this);
+    timerObservable.broadcast("start-timer");
   }
 
   render() {
