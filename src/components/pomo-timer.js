@@ -55,7 +55,7 @@ class PomoTimer extends HTMLElement {
     this.setTime();
     this.updatePomoTimerClock();
     this.clearTimer();
-    // this.startTimer();
+    this.startTimer();
   }
   disconnectedCallback() {
     // this.clearTimer();
@@ -95,6 +95,9 @@ class PomoTimer extends HTMLElement {
         this.time = this.formatTime(this.timeInSeconds);
         this.updatePomoTimerClock();
       }, 1000);
+    } else {
+      this.clearTimer();
+      this.startTimer();
     }
   }
 

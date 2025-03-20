@@ -1,3 +1,4 @@
+import { setDurationObservable } from "../utils/observables/set-duration-observable";
 import { timerObservable } from "../utils/observables/timer-observable";
 
 class PomoTimerActions extends HTMLElement {
@@ -5,6 +6,9 @@ class PomoTimerActions extends HTMLElement {
     super();
     this.render();
     this.setUpReferences();
+    this.setUpInstances();
+  }
+  setUpInstances() {
     this.isClockRunning = false;
   }
 
@@ -14,6 +18,7 @@ class PomoTimerActions extends HTMLElement {
     );
     this.resetButton = this.querySelector(".pomo-timer-actions__reset");
   }
+
   setUpEventListeners() {
     this.startPauseButton.addEventListener(
       "click",
@@ -24,23 +29,28 @@ class PomoTimerActions extends HTMLElement {
       "click",
       this.handleResetButtonClick.bind(this)
     );
+    setDurationObservable.subscribe(this.handleStartClick.bind(this));
   }
+
   connectedCallback() {
     this.setUpEventListeners();
   }
+
   handleStartPauseButtonClick() {
     if (!this.isClockRunning) this.handleStartClick();
     else this.handlePauseClick();
-    this.setIsClockRunning(!this.isClockRunning);
   }
+
   handleStartClick() {
     timerObservable.broadcast("start-timer");
     this.updateStartPauseText("Pause");
+    this.setIsClockRunning(true);
   }
 
   handlePauseClick() {
     timerObservable.broadcast("pause-timer");
     this.updateStartPauseText("Start");
+    this.setIsClockRunning(false);
   }
   handleResetButtonClick() {
     timerObservable.broadcast("reset-timer");
@@ -57,6 +67,7 @@ class PomoTimerActions extends HTMLElement {
       "click",
       this.handleResetButtonClick.bind(this)
     );
+    setDurationObservable.unsubscibe(this.handleStartClick.bind(this));
   }
 
   setIsClockRunning(status) {
