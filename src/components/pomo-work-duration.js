@@ -1,3 +1,5 @@
+import { setDurationObservable } from "../utils/observables/set-duration-observable";
+
 class PomoWorkDuration extends HTMLElement {
   constructor() {
     super();
@@ -10,14 +12,7 @@ class PomoWorkDuration extends HTMLElement {
   connectedCallback() {
     this.workDurationButtons.forEach((workDurationButton) => {
       workDurationButton.addEventListener("click", (e) => {
-        const workDurationButtonEvent = new CustomEvent("set-work-duration", {
-          bubbles: true,
-          composed: true,
-          detail: {
-            workDuration: parseInt(e.target.innerText),
-          },
-        });
-        this.dispatchEvent(workDurationButtonEvent);
+        setDurationObservable.broadcast({ workDuration: e.target.textContent });
       });
     });
   }

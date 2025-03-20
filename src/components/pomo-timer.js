@@ -1,3 +1,6 @@
+import { setDurationObservable } from "../utils/observables/set-duration-observable";
+import { timerObservable } from "../utils/observables/timer-observable";
+
 class PomoTimer extends HTMLElement {
   constructor() {
     super();
@@ -14,19 +17,28 @@ class PomoTimer extends HTMLElement {
     this.pomoTimerClock = this.querySelector(".pomo-timer__clock");
   }
   setUpEventListeners() {
-    document.addEventListener("start-timer", this.handleStartTimerEvent);
-    document.addEventListener("pause-timer", this.handlePauseTimerEvent);
-    document.addEventListener("reset-timer", this.handleResetTimerEvent);
-    document.addEventListener(
-      "set-work-duration",
-      this.handleSetWorkDurationEvent
-    );
+    timerObservable.subscribe(this.subscribeToTimerEvent.bind(this));
+    setDurationObservable.subscribe(this.handleSetWorkDurationEvent.bind(this));
   }
   connectedCallback() {
     this.setUpEventListeners();
   }
+  subscribeToTimerEvent(data) {
+    switch (data) {
+      case "start-timer":
+        this.handleStartTimerEvent();
+        break;
+      case "pause-timer":
+        this.handlePauseTimerEvent();
+        break;
+      default:
+        this.handleResetTimerEvent();
+        break;
+    }
+  }
 
   handleStartTimerEvent = () => {
+    console.log("start");
     this.startTimer();
   };
 
@@ -38,21 +50,18 @@ class PomoTimer extends HTMLElement {
     this.resetTimer();
   };
   // Arrow functions in class definitions create new functions for each instance, potentially increasing memory usage.
-  handleSetWorkDurationEvent = (e) => {
-    this.workDuration = e.detail.workDuration;
+  handleSetWorkDurationEvent(data) {
+    this.workDuration = data.workDuration;
     this.setTime();
     this.updatePomoTimerClock();
     this.clearTimer();
-    this.startTimer();
-  };
+    // this.startTimer();
+  }
   disconnectedCallback() {
     // this.clearTimer();
-    document.removeEventListener("start-timer", this.handleStartTimerEvent);
-    document.removeEventListener("pause-timer", this.handlePauseTimerEvent);
-    document.removeEventListener("reset-timer", this.handleResetTimerEvent);
-    document.removeEventListener(
-      "set-work-duration",
-      this.handleSetWorkDurationEvent
+    timerObservable.unsubscribe(this.subscribeToTimerEvent.bind(this));
+    setDurationObservable.unsubscibe(
+      this.handleSetWorkDurationEvent.bind(this)
     );
   }
 

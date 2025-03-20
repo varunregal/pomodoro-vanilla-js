@@ -1,8 +1,4 @@
-import {
-  dispatchResetTimerEvent,
-  dispatchStartTimerEvent,
-  dispatchPauseTimerEvent,
-} from "../utils/events";
+import { timerObservable } from "../utils/observables/timer-observable";
 
 class PomoTimerActions extends HTMLElement {
   constructor() {
@@ -21,43 +17,46 @@ class PomoTimerActions extends HTMLElement {
   setUpEventListeners() {
     this.startPauseButton.addEventListener(
       "click",
-      this.handleStartPauseButtonClick
+      this.handleStartPauseButtonClick.bind(this)
     );
 
-    this.resetButton.addEventListener("click", this.handleResetButtonClick);
+    this.resetButton.addEventListener(
+      "click",
+      this.handleResetButtonClick.bind(this)
+    );
   }
   connectedCallback() {
     this.setUpEventListeners();
   }
-
-  handleStartPauseButtonClick = () => {
-    if (this.isClockRunning) {
-      dispatchPauseTimerEvent(this);
-      this.updateStartPauseText("Start");
-    } else {
-      dispatchStartTimerEvent(this);
-      this.updateStartPauseText("Pause");
-    }
+  handleStartPauseButtonClick() {
+    if (!this.isClockRunning) this.handleStartClick();
+    else this.handlePauseClick();
     this.setIsClockRunning(!this.isClockRunning);
-  };
+  }
+  handleStartClick() {
+    timerObservable.broadcast("start-timer");
+    this.updateStartPauseText("Pause");
+  }
 
-  handleResetButtonClick = () => {
-    dispatchResetTimerEvent(this);
+  handlePauseClick() {
+    timerObservable.broadcast("pause-timer");
+    this.updateStartPauseText("Start");
+  }
+  handleResetButtonClick() {
+    timerObservable.broadcast("reset-timer");
     this.setIsClockRunning(false);
     this.updateStartPauseText("Start");
-  };
+  }
 
   disconnectedCallback() {
-    if (this.startPauseButton)
-      this.startPauseButton.removeEventListener(
-        "click",
-        this.handleStartPauseButtonClick
-      );
-    if (this.resetButton)
-      this.resetButton.removeEventListener(
-        "click",
-        this.handleResetButtonClick
-      );
+    this.startPauseButton.removeEventListener(
+      "click",
+      this.handleStartPauseButtonClick.bind(this)
+    );
+    this.resetButton.removeEventListener(
+      "click",
+      this.handleResetButtonClick.bind(this)
+    );
   }
 
   setIsClockRunning(status) {
