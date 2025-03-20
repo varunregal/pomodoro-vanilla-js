@@ -1,53 +1,79 @@
 class PomoTimer extends HTMLElement {
   constructor() {
     super();
+    this.setUpInstances();
+    this.render();
+    this.setUpReferences();
+  }
+  setUpInstances() {
     this.timeIntervalId;
     this.workDuration = 15;
     this.setTime();
-    this.render();
+  }
+  setUpReferences() {
+    this.pomoTimerClock = this.querySelector(".pomo-timer__clock");
+  }
+  setUpEventListeners() {
+    document.addEventListener("start-timer", this.handleStartTimerEvent);
+    document.addEventListener("pause-timer", this.handlePauseTimerEvent);
+    document.addEventListener("reset-timer", this.handleResetTimerEvent);
+    document.addEventListener(
+      "set-work-duration",
+      this.handleSetWorkDurationEvent
+    );
   }
   connectedCallback() {
-    document.addEventListener("start-timer", () => {
-      this.startTimer();
-    });
-
-    document.addEventListener("pause-timer", () => {
-      this.pauseTimer();
-    });
-
-    document.addEventListener("reset-timer", () => {
-      this.resetTimer();
-    });
-
-    document.addEventListener("set-work-duration", (e) => {
-      this.workDuration = e.detail.workDuration;
-      this.setTime();
-      this.render();
-    });
+    this.setUpEventListeners();
   }
 
-  disconnectedCallback() {
+  handleStartTimerEvent = () => {
+    this.startTimer();
+  };
+
+  handlePauseTimerEvent = () => {
+    this.pauseTimer();
+  };
+
+  handleResetTimerEvent = () => {
+    this.resetTimer();
+  };
+  // Arrow functions in class definitions create new functions for each instance, potentially increasing memory usage.
+  handleSetWorkDurationEvent = (e) => {
+    this.workDuration = e.detail.workDuration;
+    this.setTime();
+    this.updatePomoTimerClock();
     this.clearTimer();
-    document.removeEventListener("start-timer");
-    document.removeEventListener("pause-timer");
-    document.removeEventListener("reset-timer");
-    document.removeEventListener("set-work-duration");
+    this.startTimer();
+  };
+  disconnectedCallback() {
+    // this.clearTimer();
+    document.removeEventListener("start-timer", this.handleStartTimerEvent);
+    document.removeEventListener("pause-timer", this.handlePauseTimerEvent);
+    document.removeEventListener("reset-timer", this.handleResetTimerEvent);
+    document.removeEventListener(
+      "set-work-duration",
+      this.handleSetWorkDurationEvent
+    );
   }
 
   setTime() {
     this.timeInSeconds = this.workDuration * 60;
-    this.time = this.generateTime(this.timeInSeconds);
+    this.time = this.formatTime(this.timeInSeconds);
   }
 
-  generateTime(duration) {
+  formatTime(duration) {
     const minutes = Math.floor(duration / 60);
-    const subSeconds = duration - minutes * 60;
+    const subSeconds = duration % 60;
 
     return (
       minutes.toString() +
       ":" +
       (subSeconds < 10 ? "0" + subSeconds.toString() : subSeconds.toString())
     );
+  }
+
+  updatePomoTimerClock() {
+    this.pomoTimerClock.textContent = this.time;
   }
   startTimer() {
     if (!this.timeIntervalId) {
@@ -56,12 +82,11 @@ class PomoTimer extends HTMLElement {
       this.timeIntervalId = setInterval(() => {
         const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
         this.timeInSeconds = Math.max(0, initialSeconds - elapsedSeconds);
-
-        this.time = this.generateTime(this.timeInSeconds);
-        this.render();
+        // handle condition when timer reaches zero
+        this.time = this.formatTime(this.timeInSeconds);
+        this.updatePomoTimerClock();
       }, 1000);
     }
-    console.log(this.timeIntervalId);
   }
 
   pauseTimer() {
@@ -71,13 +96,12 @@ class PomoTimer extends HTMLElement {
   resetTimer() {
     this.clearTimer();
     this.setTime();
-    this.render();
+    this.updatePomoTimerClock();
   }
 
   clearTimer() {
     clearInterval(this.timeIntervalId);
     this.timeIntervalId = undefined;
-    console.log(this.timeIntervalId);
   }
 
   render() {
