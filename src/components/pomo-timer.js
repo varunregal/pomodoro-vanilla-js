@@ -37,28 +37,24 @@ class PomoTimer extends HTMLElement {
     }
   }
 
-  handleStartTimerEvent = () => {
-    console.log("start");
+  handleStartTimerEvent() {
     this.startTimer();
-  };
+  }
 
-  handlePauseTimerEvent = () => {
+  handlePauseTimerEvent() {
     this.pauseTimer();
-  };
+  }
 
-  handleResetTimerEvent = () => {
+  handleResetTimerEvent() {
     this.resetTimer();
-  };
+  }
   // Arrow functions in class definitions create new functions for each instance, potentially increasing memory usage.
   handleSetWorkDurationEvent(data) {
     this.workDuration = data.workDuration;
-    this.setTime();
-    this.updatePomoTimerClock();
-    this.clearTimer();
-    this.startTimer();
+    this.resetTimer();
   }
   disconnectedCallback() {
-    // this.clearTimer();
+    this.clearTimer();
     timerObservable.unsubscribe(this.subscribeToTimerEvent.bind(this));
     setDurationObservable.unsubscibe(
       this.handleSetWorkDurationEvent.bind(this)
@@ -114,8 +110,8 @@ class PomoTimer extends HTMLElement {
 
   render() {
     this.innerHTML = `
-      <section class="pomo-timer">
-        <div class="pomo-timer__clock">
+      <section class="pomo-timer text-center">
+        <div class="pomo-timer__clock text-[120px] font-bold">
           ${this.time}
         </div>
       </section>

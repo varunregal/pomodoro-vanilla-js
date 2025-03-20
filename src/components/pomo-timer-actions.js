@@ -78,7 +78,7 @@ class PomoTimerActions extends HTMLElement {
 
   render() {
     this.innerHTML = `
-      <section class="flex gap-4">
+      <section class="flex gap-4 justify-center">
         <button class="start-or-pause btn btn-primary">Start</button>
         <button class="reset btn btn-primary">Reset</button>
       </section>

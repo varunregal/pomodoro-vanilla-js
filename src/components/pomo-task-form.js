@@ -23,15 +23,10 @@ class PomoTaskForm extends HTMLElement {
 
   render() {
     this.innerHTML = `
-      <form class="flex flex-col gap-4">
-        <input name="task" placeholder="What are you planning to focus on today" class="form-input"/>
-        <select class="form-select">
-          <option>Development</option>
-          <option>Education</option>
-          <option>Hobbies</option>
-        </select>
-        <button type="submit" class='btn btn-primary'>Submit</button>
-      </form>
+    <section class="flex flex-col gap-4">
+      <input name="task" placeholder="What are you planning to focus on today" class="form-input"/>
+      <input type="number" placeholder="Target Sessions" class="form-input w-full md:w-1/3"/>
+    </section>
     `;
   }
 }

@@ -8,7 +8,7 @@ class PomodoroTimer extends HTMLElement {
   render() {
     this.innerHTML = `
       <section class="flex flex-col gap-10">
-        <pomo-heading-with-helper></pomo-heading-with-helper>
+        <pomo-navbar></pomo-navbar>
         <pomo-task-form></pomo-task-form>
         <pomo-timer></pomo-timer>
         <pomo-timer-actions></pomo-timer-actions>

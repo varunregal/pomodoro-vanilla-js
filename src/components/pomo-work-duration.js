@@ -46,7 +46,7 @@ class PomoWorkDuration extends HTMLElement {
       .map((duration) => {
         return `
           <li>
-            <button class="btn btn-secondary ${
+            <button class="btn btn-secondary cursor-pointer ${
               this.selected === duration
                 ? [...this.selectedClasses].join(" ")
                 : ""
@@ -60,8 +60,8 @@ class PomoWorkDuration extends HTMLElement {
   }
   render() {
     this.innerHTML = `
-      <section class="flex flex-col gap-4">
-        <ul class="work-duration__list list-none flex gap-4">
+      <section>
+        <ul class="work-duration__list list-none flex gap-2 md:gap-4 justify-center">
           ${this.generateWorkDurationTabs()}
         </ul>
       </section>
